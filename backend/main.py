@@ -4,17 +4,15 @@ import cv2
 import numpy as np
 import mediapipe as mp
 import pandas as pd
-from typing import List
-import base64
-from io import BytesIO
-from PIL import Image
+from typing import List, Optional
+from face_shape_recommendations import FACE_SHAPE_RECOMMENDATIONS, FRAME_STYLE_CHARACTERISTICS
 
 app = FastAPI()
 
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origins
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -71,26 +69,82 @@ def detect_face_shape(image_data: bytes) -> str:
 async def detect_face(file: UploadFile = File(...)):
     contents = await file.read()
     face_shape = detect_face_shape(contents)
-    return {"face_shape": face_shape}
+    return {
+        "face_shape": face_shape,
+        "recommended_styles": FACE_SHAPE_RECOMMENDATIONS.get(face_shape, []),
+        "style_info": {
+            style: FRAME_STYLE_CHARACTERISTICS[style]
+            for style in FACE_SHAPE_RECOMMENDATIONS.get(face_shape, [])
+            if style in FRAME_STYLE_CHARACTERISTICS
+        }
+    }
 
 @app.get("/matching-frames/{face_shape}")
-async def get_matching_frames(face_shape: str):
-    matching_frames = df[df['frame_shape'].str.lower() == face_shape.lower()]
+async def get_matching_frames(
+    face_shape: str,
+    gender: Optional[str] = None,
+    age_group: Optional[str] = None
+):
+    recommended_styles = FACE_SHAPE_RECOMMENDATIONS.get(face_shape, [])
+    matching_frames = df[df['frame_shape'].isin(recommended_styles)]
+    
+    if gender:
+        matching_frames = matching_frames[
+            (matching_frames['gender'] == gender) | 
+            (matching_frames['gender'] == 'unisex')
+        ]
+    
+    if age_group:
+        matching_frames = matching_frames[matching_frames['age_group'] == age_group]
+        
     return matching_frames.to_dict(orient='records')
 
 @app.get("/frames")
 async def get_frames(
-    shape: str = None,
-    min_price: float = None,
-    max_price: float = None
+    shape: Optional[str] = None,
+    min_price: Optional[float] = None,
+    max_price: Optional[float] = None,
+    brand: Optional[str] = None,
+    gender: Optional[str] = None,
+    age_group: Optional[str] = None
 ):
     filtered_df = df.copy()
     
     if shape:
-        filtered_df = filtered_df[filtered_df['frame_shape'].str.lower() == shape.lower()]
+        if shape in FACE_SHAPE_RECOMMENDATIONS:
+            # If a face shape is provided, get all recommended frame shapes
+            recommended_styles = FACE_SHAPE_RECOMMENDATIONS[shape]
+            filtered_df = filtered_df[filtered_df['frame_shape'].isin(recommended_styles)]
+        else:
+            # If a specific frame shape is provided
+            filtered_df = filtered_df[filtered_df['frame_shape'] == shape]
+            
     if min_price is not None:
         filtered_df = filtered_df[filtered_df['price'] >= min_price]
     if max_price is not None:
         filtered_df = filtered_df[filtered_df['price'] <= max_price]
+    if brand:
+        filtered_df = filtered_df[filtered_df['brand'].str.lower() == brand.lower()]
+    if gender:
+        filtered_df = filtered_df[
+            (filtered_df['gender'] == gender) | 
+            (filtered_df['gender'] == 'unisex')
+        ]
+    if age_group:
+        filtered_df = filtered_df[filtered_df['age_group'] == age_group]
         
     return filtered_df.to_dict(orient='records')
+
+@app.get("/filters")
+async def get_filters():
+    """Get all available filter options"""
+    return {
+        "brands": df['brand'].unique().tolist(),
+        "frame_shapes": df['frame_shape'].unique().tolist(),
+        "genders": df['gender'].unique().tolist(),
+        "age_groups": df['age_group'].unique().tolist(),
+        "price_range": {
+            "min": float(df['price'].min()),
+            "max": float(df['price'].max())
+        }
+    }

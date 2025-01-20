@@ -1,7 +1,21 @@
-image_links,frame_shape,price
-https://example.com/frames/1.jpg,round,199.99
-https://example.com/frames/2.jpg,oval,149.99
-https://example.com/frames/3.jpg,square,179.99
-https://example.com/frames/4.jpg,heart,229.99
-https://example.com/frames/5.jpg,oblong,159.99
-https://example.com/frames/6.jpg,round,189.99
+brand,model,frame_shape,price,gender,age_group,image_links
+Ray-Ban,RB2140 Original Wayfarer,wayframe,169.00,unisex,adult,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Ray-Ban/Ray-Ban-RB2140-Original-Wayfarer-901-412435.jpg
+Ray-Ban,RB3447 Round Metal,round,163.00,unisex,adult,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Ray-Ban/Ray-Ban-RB3447-Round-Metal-001-412434.jpg
+Ray-Ban,RB3025 Aviator,aviator,169.00,unisex,adult,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Ray-Ban/Ray-Ban-RB3025-Aviator-L0205-412433.jpg
+Oakley,OO9102 Holbrook,rectangular,156.00,male,adult,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Oakley/Oakley-OO9102-Holbrook-9102F5-412432.jpg
+Oakley,OO4086 Tailend,round,183.00,unisex,adult,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Oakley/Oakley-OO4086-Tailend-408603-412431.jpg
+Persol,PO3019S,geometric,329.00,male,adult,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Persol/Persol-PO3019S-95-31-412430.jpg
+Tom Ford,FT5401 Square,square,415.00,male,adult,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Tom-Ford/Tom-Ford-FT5401-001-412429.jpg
+Warby Parker,Haskell,rectangular,145.00,unisex,adult,https://media.warbyparker.com/image/upload/v1/b/eyeglasses/men/haskell/jet-black-matte_v2.jpg
+Warby Parker,Durand,round,145.00,unisex,adult,https://media.warbyparker.com/image/upload/v1/b/eyeglasses/men/durand/whiskey-tortoise_v2.jpg
+Oliver Peoples,Gregory Peck,round,415.00,unisex,adult,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Oliver-Peoples/Oliver-Peoples-Gregory-Peck-OV5186-1484-412428.jpg
+Gucci,GG0025O,oversized,405.00,female,adult,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Gucci/Gucci-GG0025O-001-412427.jpg
+Prada,PR 10VS,cat-eye,370.00,female,adult,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Prada/Prada-PR10VS-1AB5S0-412426.jpg
+Dior,SoStellaire1,butterfly,495.00,female,adult,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Dior/Dior-SoStellaire1-KB7-412425.jpg
+Moscot,Lemtosh,round,380.00,unisex,adult,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Moscot/Moscot-Lemtosh-Tortoise-412424.jpg
+Ray-Ban Junior,RJ9506S Aviator,aviator,89.00,unisex,children,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Ray-Ban-Junior/Ray-Ban-Junior-RJ9506S-223-13-412423.jpg
+Nike,5045 Kids,rectangular,120.00,male,children,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Nike/Nike-5045-Kids-001-412422.jpg
+Oakley Youth,OY8012 Tail Whip,rectangular,106.00,male,children,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Oakley-Youth/Oakley-Youth-OY8012-Tail-Whip-801201-412421.jpg
+Ray-Ban Junior,RJ1556,round,109.00,unisex,children,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Ray-Ban-Junior/Ray-Ban-Junior-RJ1556-3685-412420.jpg
+Stella McCartney Kids,SK0026O,butterfly,175.00,female,children,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Stella-McCartney-Kids/Stella-McCartney-Kids-SK0026O-003-412419.jpg
+Gucci Junior,GG0066S,oversized,259.00,female,children,https://www.smartbuyglasses.com/public/images/designer_eyeglasses/Gucci-Junior/Gucci-Junior-GG0066S-001-412418.jpg
