@@ -5,9 +5,13 @@ import FrameList from './components/FrameList'
 import SearchFilters from './components/SearchFilters'
 
 interface Frame {
-  image_links: string;
+  brand: string;
+  model: string;
   frame_shape: string;
   price: number;
+  image_links: string;
+  gender: string;
+  age_group: string;
 }
 
 function App() {
@@ -17,7 +21,9 @@ function App() {
   const [filters, setFilters] = useState({
     shape: '',
     minPrice: '',
-    maxPrice: ''
+    maxPrice: '',
+    gender: '',
+    ageGroup: ''
   })
 
   return (

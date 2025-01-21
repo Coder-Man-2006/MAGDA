@@ -27,7 +27,7 @@ interface FilterOptions {
 
 const SearchFilters = ({ filters, setFilters, setFrames }: SearchFiltersProps) => {
   const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null)
-
+m
   useEffect(() => {
     // Fetch available filter options
     const fetchFilterOptions = async () => {
