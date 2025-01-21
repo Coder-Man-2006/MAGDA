@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import mediapipe as mp
 import pandas as pd
+import pickle
 from typing import List, Optional
 from face_shape_recommendations import FACE_SHAPE_RECOMMENDATIONS, FRAME_STYLE_CHARACTERISTICS
 
@@ -29,6 +30,39 @@ face_mesh = mp_face_mesh.FaceMesh(
     min_detection_confidence=0.5
 )
 
+# Load the trained model and scaler
+with open('face_shape_model.pkl', 'rb') as f:
+    clf, scaler = pickle.load(f)
+
+def extract_features(landmarks):
+    """Extract meaningful features from facial landmarks"""
+    features = []
+    
+    # Face height (forehead to chin)
+    face_height = landmarks.landmark[152].y - landmarks.landmark[10].y
+    
+    # Face width (temple to temple)
+    face_width = landmarks.landmark[454].x - landmarks.landmark[234].x
+    
+    # Jaw width
+    jaw_width = landmarks.landmark[172].x - landmarks.landmark[397].x
+    
+    # Cheekbone width
+    cheekbone_width = landmarks.landmark[123].x - landmarks.landmark[352].x
+    
+    # Forehead width
+    forehead_width = landmarks.landmark[109].x - landmarks.landmark[338].x
+    
+    # Calculate ratios
+    features.extend([
+        face_height / face_width,  # Height to width ratio
+        jaw_width / face_width,    # Jaw to face width ratio
+        cheekbone_width / jaw_width,  # Cheekbone to jaw ratio
+        forehead_width / jaw_width,   # Forehead to jaw ratio
+    ])
+    
+    return features
+
 def detect_face_shape(image_data: bytes) -> str:
     # Convert bytes to numpy array
     nparr = np.frombuffer(image_data, np.uint8)
@@ -45,25 +79,16 @@ def detect_face_shape(image_data: bytes) -> str:
     
     landmarks = results.multi_face_landmarks[0]
     
-    # Extract key measurements
-    face_height = landmarks.landmark[152].y - landmarks.landmark[10].y
-    face_width = landmarks.landmark[454].x - landmarks.landmark[234].x
-    jaw_width = landmarks.landmark[172].x - landmarks.landmark[397].x
+    # Extract features
+    features = extract_features(landmarks)
     
-    # Determine face shape based on ratios
-    ratio = face_height / face_width
-    jaw_ratio = jaw_width / face_width
+    # Scale features
+    features_scaled = scaler.transform([features])
     
-    if ratio > 1.15:
-        return "oblong"
-    elif ratio < 0.85:
-        return "round"
-    elif jaw_ratio < 0.78:
-        return "heart"
-    elif jaw_ratio > 0.85:
-        return "square"
-    else:
-        return "oval"
+    # Predict face shape
+    face_shape = clf.predict(features_scaled)[0]
+    
+    return face_shape
 
 @app.post("/detect-face")
 async def detect_face(file: UploadFile = File(...)):
